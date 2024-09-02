@@ -7,6 +7,9 @@
 
 using namespace std;
 
+const int READ = 0;  // Variable de lectura para pipe
+const int WRITE = 1; // Variable de escritura para pipe
+
 string getCurrentDir() {
     char buff[FILENAME_MAX];
     
@@ -97,81 +100,14 @@ void reminder(int seconds, const string &message) {
         cout << "Error al crear el proceso de recordatorio." << endl;
     }
 }
-
-
-void comando_sin_pipe(const vector<vector<string>>& comandos) {
-    if (comandos.empty() || comandos[0].empty()) return;
-
-    const string& cmd = comandos[0][0];
-
-    if (cmd == "cd") {
-        const char* newDir = nullptr;
-        if (comandos[0].size() < 2) {
-            newDir = getenv("HOME");
-            if (newDir == nullptr) {
-                cout << "Uso incorrecto del comando 'cd'. Debes especificar un directorio." << endl;
-                return;
-            }
-        } else {
-            newDir = comandos[0][1].c_str();
-        }
-
-        if (chdir(newDir) != 0) {
-            cout << "Error al cambiar el directorio a " << newDir << endl;
-        }
-    //DESDE AQUI ES EL REMINDER
-    }else if(comandos[0][0] == "reminder"){
-
-        if (comandos[0].size() < 3) {
-            cout << "Uso incorrecto del comando 'reminder'. Debes especificar un "
-                    "tiempo y un mensaje." << endl;
-    } else {
-      try {
-          int seconds = stoi(comandos[0][1]);
-          string message = accumulate(comandos[0].begin() + 2, comandos[0].end(), string(),[](const string &a, const string &b) 
-            {return a.empty() ? b : a + " " + b;});
-          reminder(seconds, message);
-      } catch (const exception &e) {
-          cout << "Uso incorrecto del comando 'reminder'. Debes especificar un "
-                        "tiempo como número y un mensaje como cadena." << endl;
-      }
-      }
-      //HASTA ACÁ ES EL REMINDER
-    } else {
-        vector<char*> args;
-        for (const auto& arg : comandos[0]) {
-            args.push_back(strdup(arg.c_str()));
-        }
-        args.push_back(nullptr); // Finaliza el array con un puntero nulo
-
-        int pid = fork();
-        if (pid == 0) { // Proceso hijo
-            if (execvp(args[0], args.data()) < 0) {
-                cout << "Error en el comando ingresado" << endl;
-                exit(EXIT_FAILURE);
-            }
-
-        } else if (pid < 0) {
-            cout << "Error al crear el proceso hijo" << endl;
-
-        } else { // Proceso padre
-            wait(NULL);
-        }
-
-        // Liberar la memoria alocada por strdup
-        for (char* arg : args) {
-            free(arg);
-        }
-    }
-}
-
 // Mapa para almacenar los comandos favoritos
 unordered_map<int, string> favoritos;
 int nextId = 1; // ID del próximo comando
-
-// Función para manejar comandos favoritos
 void favs(const string &comando) {
+
     stringstream ss(comando);
+
+    
     string subcmd;
     ss >> subcmd;
 
@@ -279,7 +215,210 @@ void favs(const string &comando) {
     }
 }
 
-int main(){
-  
+void comando_sin_pipe(const vector<vector<string>>& comandos) {
+    if (comandos.empty() || comandos[0].empty()) return;
+
+    const string& cmd = comandos[0][0];
+
+    if (cmd == "cd") {
+        const char* newDir = nullptr;
+        if (comandos[0].size() < 2) {
+            newDir = getenv("HOME");
+            if (newDir == nullptr) {
+                cout << "Uso incorrecto del comando 'cd'. Debes especificar un directorio." << endl;
+                return;
+            }
+        } else {
+            newDir = comandos[0][1].c_str();
+        }
+
+        if (chdir(newDir) != 0) {
+            cout << "Error al cambiar el directorio a " << newDir << endl;
+        }
+
+    }else if(comandos[0][0] == "favs"){
+
+        if (comandos[0].size() < 2) {
+            cout << "Uso incorrecto del comando 'favorites'. Debes especificar un "
+                    "argumento." << endl;
+        }else{
+            stringstream ss;
+            for (size_t i = 1; i < comandos[0].size(); ++i) {
+                ss << comandos[0][i] << " ";
+            }
+            favs(ss.str()); 
+        }
+    //DESDE AQUI ES EL REMINDER
+    }else if(comandos[0][0] == "reminder"){
+
+        if (comandos[0].size() < 3) {
+            cout << "Uso incorrecto del comando 'reminder'. Debes especificar un "
+                    "tiempo y un mensaje." << endl;
+
+
+    } else {
+      try {
+          int seconds = stoi(comandos[0][1]);
+          string message = accumulate(comandos[0].begin() + 2, comandos[0].end(), string(),[](const string &a, const string &b) 
+            {return a.empty() ? b : a + " " + b;});
+          reminder(seconds, message);
+      } catch (const exception &e) {
+          cout << "Uso incorrecto del comando 'reminder'. Debes especificar un "
+                        "tiempo como número y un mensaje como cadena." << endl;
+      }
+      }
+      //HASTA ACÁ ES EL REMINDER
+    } else {
+        vector<char*> args;
+        for (const auto& arg : comandos[0]) {
+            args.push_back(strdup(arg.c_str()));
+        }
+        args.push_back(nullptr); // Finaliza el array con un puntero nulo
+
+        int pid = fork();
+        if (pid == 0) { // Proceso hijo
+            if (execvp(args[0], args.data()) < 0) {
+                cout << "Error en el comando ingresado" << endl;
+                exit(EXIT_FAILURE);
+            }
+
+        } else if (pid < 0) {
+            cout << "Error al crear el proceso hijo" << endl;
+
+        } else { // Proceso padre
+            wait(NULL);
+        }
+
+        // Liberar la memoria alocada por strdup
+        for (char* arg : args) {
+            free(arg);
+        }
+    }
 }
 
+
+
+// Función para manejar comandos favoritos
+
+
+int main(){
+    vector<vector<string>> comandos; // Matriz de comandos.
+    string comando;
+    system("clear");
+    bool prompt = true;
+    cout << GRN "MyShell " << getCurrentDir() << " # ";
+    cout << NC;
+    long long maxim;
+
+    while (getline(cin, comando)) {
+        maxim = 0;
+        int ret = parser(comando, maxim, comandos);
+        if (ret == 1) {
+            comando.clear();
+            continue;
+        }
+        //-------------CASO DONDE SOLO SE TIENE UNA LINEA DE COMANDO: ls -la. NO
+    // NECESITA PIPES--------------//
+    if (comandos.size() <= 1) {
+      comando_sin_pipe(comandos);
+    } else {
+      // Se buscan las pipe en la linea de comandos y se divide el comando
+
+      char *ArgsCommand[comandos.size()][maxim + 1];
+      for (int i = 0; i < comandos.size(); ++i) {
+        for (int j = 0; j < comandos[i].size(); j++) {
+          ArgsCommand[i][j] = strdup(comandos[i][j].c_str());
+        }
+        ArgsCommand[i][comandos[i].size()] = NULL;
+      }
+
+      // ----- INICIAMOS LAS PIPES-------//
+
+      long long allpipes = comandos.size() - 1;
+      int Pipes[allpipes][2];
+      for (int k = 0; k < allpipes; ++k)
+        pipe(Pipes[k]);
+
+      int count = 0;
+
+      // ------ PRIMER PROCESO ------//
+      if (fork() == 0) {
+        dup2(Pipes[0][WRITE], WRITE); // Abrimos el canal de escritura.
+        close(Pipes[0][READ]);        // zamos el canal de lectura.
+        int path = 1;
+        while (path < allpipes) {
+          close(Pipes[path][READ]);
+          close(Pipes[path][WRITE]);
+          path++;
+        }
+
+        int a = execvp(ArgsCommand[0][0], ArgsCommand[0]);
+        if (a < 0) {
+          cout << "Error en el comando ingresado" << endl;
+          exit(0);
+        }
+      }
+
+      //----- 2 PROCESOS O MAS----//
+      if (allpipes > 1) {
+        while (count < allpipes - 1) {
+          if (fork() == 0) {
+            dup2(Pipes[count][READ], READ); // Abrimos el canal de lectura.
+            dup2(Pipes[count + 1][WRITE],
+                 WRITE); // Abrimos el canal de escritura.
+            for (int i = 0; i < allpipes; ++i) {
+              if (i == count)
+                close(Pipes[i][WRITE]);
+              else if (i == count + 1)
+                close(Pipes[i][READ]);
+              else {
+                close(Pipes[i][READ]);
+                close(Pipes[i][WRITE]);
+              }
+            }
+            int c = execvp(ArgsCommand[count + 1][0], ArgsCommand[count + 1]);
+            if (c < 0) {
+              cout << "Error en el comando ingresado" << endl;
+              exit(0);
+            }
+          }
+          count++;
+        }
+      }
+
+      //------ PARTE FINAL DEL PROCESO -----//
+      if (fork() == 0) {
+        dup2(Pipes[count][READ], READ); // Leer la ultima pipe
+        close(Pipes[count][WRITE]);     // Cerrar escritura de la ultima pipe.
+        int path = 0;
+
+        while (path < allpipes) { // Cerrar las pipes
+          if (path == count) {
+            path++;
+            continue;
+          }
+          close(Pipes[path][READ]);
+          close(Pipes[path][WRITE]);
+          path++;
+        }
+        int p = execvp(ArgsCommand[count + 1][0],
+                       ArgsCommand[count + 1]); // Ejecutamos el comando.
+        if (p < 0) {
+          cout << "Error en el comando ingresado" << endl;
+          exit(0);
+        }
+      }
+      for (int i = 0; i < allpipes; ++i) {
+        close(Pipes[i][WRITE]);
+        close(Pipes[i][READ]);
+      }
+      for (int l = 0; l < comandos.size(); ++l)
+        wait(NULL); // Esperar a los hijos.
+    }
+    comandos.clear();
+    comando.clear();
+    cout << GRN "MyShell " << getCurrentDir() << " # ";
+    cout << NC;
+    }
+    return 0;
+}
