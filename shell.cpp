@@ -106,22 +106,33 @@ int nextId = 1; // ID del próximo comando
 void favs(const string &comando) {
 
     stringstream ss(comando);
+    stringstream ss2(comando);
 
-    
-    string subcmd;
-    ss >> subcmd;
+    string word;
 
-    if (subcmd == "crear") {
-        string ruta;
-        ss >> ruta;
-        ofstream archivo(ruta);
+    int wordCount = 0;
+    while (ss2 >> word) {
+        ++wordCount;
+    }
+    string argumentos[wordCount];
+    for (int i = 0; i < wordCount; ++i)
+    {
+        ss >> argumentos[i];
+    }
+
+    //string subcmd;
+    //ss >> subcmd;
+
+    if (argumentos[0] == "crear") {
+        cout << "ESTOY EN LA FUNCION CREAR! " << endl;
+        ofstream archivo(argumentos[1]);
         if (archivo) {
             archivo.close();
-            cout << "Archivo de favoritos creado en: " << ruta << endl;
+            cout << "Archivo de favoritos creado en: " << argumentos[1] << endl;
         } else {
             cout << "Error al crear el archivo en la ruta especificada." << endl;
         }
-    } else if (subcmd == "mostrar") {
+    } else if (argumentos[0] == "mostrar") {
         if (favoritos.empty()) {
             cout << "No hay comandos favoritos." << endl;
         } else {
@@ -129,12 +140,15 @@ void favs(const string &comando) {
                 cout << pair.first << ": " << pair.second << endl;
             }
         }
-    } else if (subcmd == "eliminar") {
-        string nums;
-        ss >> nums;
+    } else if (argumentos[0] == "eliminar") {
+        
+        //string nums;
+        //ss >> nums; //ARGUMENTO 1
+
         vector<int> numeros;
-        stringstream ssNums(nums);
+        stringstream ssNums(argumentos[1]);
         string num;
+        
         while (getline(ssNums, num, ',')) {
             numeros.push_back(stoi(num));
         }
@@ -142,7 +156,8 @@ void favs(const string &comando) {
             favoritos.erase(num);
         }
         cout << "Comandos eliminados." << endl;
-    } else if (subcmd == "buscar") {
+
+    } else if (argumentos[0] == "buscar") {
         string cmdBuscado;
         getline(ss, cmdBuscado); // Leer el resto de la línea
         cout << "Resultados de búsqueda:" << endl;
@@ -151,10 +166,10 @@ void favs(const string &comando) {
                 cout << pair.first << ": " << pair.second << endl;
             }
         }
-    } else if (subcmd == "borrar") {
+    } else if (argumentos[0] == "borrar") {
         favoritos.clear();
         cout << "Todos los comandos favoritos han sido borrados." << endl;
-    } else if (subcmd == "ejecutar") {
+    } else if (argumentos[0] == "ejecutar") {
         int num;
         ss >> num;
         if (favoritos.find(num) != favoritos.end()) {
@@ -172,7 +187,7 @@ void favs(const string &comando) {
         } else {
             cout << "No existe el comando favorito con el número " << num << endl;
         }
-    } else if (subcmd == "cargar") {
+    } else if (argumentos[0] == "cargar") {
         string ruta;
         ss >> ruta;
         ifstream archivo(ruta);
@@ -191,10 +206,8 @@ void favs(const string &comando) {
         }
         archivo.close();
         cout << "Comandos cargados desde el archivo." << endl;
-    } else if (subcmd == "guardar") {
-        string ruta;
-        ss >> ruta;
-        ofstream archivo(ruta);
+    } else if (argumentos[0] == "guardar") {
+        ofstream archivo(argumentos[1]);
         if (archivo) {
             for (const auto &pair : favoritos) {
                 archivo << pair.second << endl;
