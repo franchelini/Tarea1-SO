@@ -51,7 +51,7 @@ string getCurrentDir() {
 int parser(const string &comando, long long &maxim, vector<vector<string>> &comandos) {
     if (comando == "exit") {
         exit(0);
-    } else if (comando.empty()) { // Si el comando está vacío, limpiar y mostrar prompt
+    } else if (comando.empty()) { // Si el comando esta vacio, limpiar y mostrar prompt
         comandos.clear();
         cout << GRN "MyShell " << getCurrentDir() << " # " << NC;
         return 1;
@@ -217,6 +217,9 @@ void favs(const string &comando) {
         } else {
             cout << "Error al abrir el archivo para guardar." << endl;
         }
+    //}else if(argumentos[0] == "automatico"){
+      //  favoritos[nextId++] = comando;
+
     } else {
         // Agrega el comando ingresado como favorito si no es uno de favoritos
         for (const auto &pair : favoritos) {
@@ -231,8 +234,11 @@ void favs(const string &comando) {
 void comando_sin_pipe(const vector<vector<string>>& comandos) {
     if (comandos.empty() || comandos[0].empty()) return;
 
+    string ComandoCompleto = accumulate(comandos[0].begin() , comandos[0].end(), string(),[](const string &a, const string &b){return a.empty() ? b : a + " " + b;});
+
     const string& cmd = comandos[0][0];
 
+    /* 
     if (cmd == "cd") {
         const char* newDir = nullptr;
         if (comandos[0].size() < 2) {
@@ -242,14 +248,17 @@ void comando_sin_pipe(const vector<vector<string>>& comandos) {
                 return;
             }
         } else {
+            favs(ComandoCompleto);
             newDir = comandos[0][1].c_str();
         }
 
         if (chdir(newDir) != 0) {
             cout << "Error al cambiar el directorio a " << newDir << endl;
         }
+    */
 
-    }else if(comandos[0][0] == "favs"){
+    /*}else*/ 
+    if(comandos[0][0] == "favs"){
 
         if (comandos[0].size() < 2) {
             cout << "Uso incorrecto del comando 'favorites'. Debes especificar un "
@@ -263,6 +272,9 @@ void comando_sin_pipe(const vector<vector<string>>& comandos) {
         }
     //DESDE AQUI ES EL REMINDER
     }else if(comandos[0][0] == "reminder"){
+
+    
+        favs(ComandoCompleto);
 
         if (comandos[0].size() < 3) {
             cout << "Uso incorrecto del comando 'reminder'. Debes especificar un "
@@ -416,10 +428,18 @@ int main(){
         }
         int p = execvp(ArgsCommand[count + 1][0],
                        ArgsCommand[count + 1]); // Ejecutamos el comando.
+        
+        //ESTA SHIET DEBE FUNCIONAR...
+        //string ComandoCompleto = accumulate(comandos[0].begin() , comandos[0].end(), string(),[](const string &a, const string &b){return a.empty() ? b : a + " " + b;});
+        //favs(ComandoCompleto);
+                       
         if (p < 0) {
           cout << "Error en el comando ingresado" << endl;
           exit(0);
         }
+
+
+
       }
       for (int i = 0; i < allpipes; ++i) {
         close(Pipes[i][WRITE]);
@@ -428,6 +448,7 @@ int main(){
       for (int l = 0; l < comandos.size(); ++l)
         wait(NULL); // Esperar a los hijos.
     }
+    
     comandos.clear();
     comando.clear();
     cout << GRN "MyShell " << getCurrentDir() << " # ";
