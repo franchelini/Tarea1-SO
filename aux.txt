@@ -1,0 +1,6 @@
+ls -l
+ls -a
+ps -aux
+reminder 2 Compila
+g++ shell_aux.cpp
+ls
