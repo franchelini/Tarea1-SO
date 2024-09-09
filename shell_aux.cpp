@@ -480,9 +480,7 @@ int main()
             continue;
         }
 
-        //ESTA SHIET HACE UN STRING DEL COMANDO
         string ComandoCompleto = accumulate(comandos[0].begin(), comandos[0].end(), string(), [](const string &a, const string &b) { return a.empty() ? b : a + " " + b; });
-        
 
         //-------------CASO DONDE SOLO SE TIENE UNA LINEA DE COMANDO: ls -la. NO
 
