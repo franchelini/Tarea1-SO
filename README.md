@@ -33,3 +33,9 @@ En caso de error se entregará un mensaje que dice "Error en el comando ingresad
 Luego, para terminar la shell se debe ejecutar el comando **exit**.
 
 ## Comandos Personalizados:
+Descripción y modo de uso de los nuevos comandos disponibles que podemos utilizar:
+
+- **favs crear ruta/archivo.txt**
+  - Modo de uso: Al estar dentro de la shell podemos ejecutar el comando crear, que creará un archivo .txt en la     dirección de la ruta especificada.
+  
+  - Ejemplo de uso: favs crear /home/usuario/Documentos/prueba.txt
