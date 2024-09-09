@@ -28,7 +28,7 @@ En caso de error se entregará un mensaje que dice "Error en el comando ingresad
 **Ejemplo de errores:**
 - xd
 - |
-- ls||wc
+- ls| |wc
 
 Luego, para terminar la shell se debe ejecutar el comando **exit**.
 
@@ -41,4 +41,29 @@ Descripción y modo de uso de los nuevos comandos disponibles que podemos utiliz
   - **Ejemplo de uso**: favs crear /home/usuario/Documentos/prueba.txt
     
 - **favs mostrar**
-  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **mostrar**, este escribirá en pantalla los comandos que se hayan ejecutado anteriormente y se encuentren almacenados en la memoria. 
+  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **mostrar**, este escribirá en pantalla los comandos que se hayan ejecutado anteriormente y se encuentren almacenados en la memoria.
+  - **Ejemplo de uso**: favs mostrar
+  - 
+- **favs eliminar num1,num2**
+  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **eliminar**, que dado un rango entre los números **num1** y **num 2** se eliminarán de la lista de favoritos los comandos correspondientes a ese rango.
+  - **Ejemplo de uso**: favs eliminar 2,5
+ 
+- **favs buscar cmd**
+  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **buscar**, que dado un comando valido en la terminal, buscará en la lista de favoritos aquel comando y lo mostrará en pantalla junto a su número asociado.
+  - **Ejemplo de uso**: favs buscar ls
+
+- **favs borrar**
+  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **borrar**, este comando eliminará todos los comandos almacenados en la lista de favoritos actual.
+  - **Ejemplo de uso**: favs borrar
+
+- **favs num ejecutar**
+  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **ejecutar**, esto ejecutará el comando asociado al número entregado en **num** que se encuentre en la lista de favoritos actual.
+  - **Ejemplo de uso**: favs 2 ejecutar
+
+- **favs cargar ruta/archivo.txt**
+  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **cargar**, que dada una ruta y un archivo .txt, este guardará los datos almacenados en el .txt en la lista de favoritos actual de la shell.
+  - **Ejemplo de uso**: favs cargar /home/usuario/Documentos/prueba.txt
+ 
+- **favs guardar ruta/archivo.txt**
+  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **guardar**, este guardará dentro de un archivo .txt los comandos almacenados en la lista de favoritos actual.
+  - **Ejemplo de uso**: favs guardar /home/usuario/Documentos/prueba.txt
