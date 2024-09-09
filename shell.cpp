@@ -270,6 +270,7 @@ void favs_cargar(const string &ruta)
         favoritos[nextId++] = comando; // Agrega nuevo favorito
     }
     archivo.close();
+    favs_mostrar();
     cout << "Comandos cargados desde el archivo." << endl;
 }
 
