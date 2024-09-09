@@ -61,7 +61,7 @@ Descripción y modo de uso de los nuevos comandos disponibles que podemos utiliz
   - **Ejemplo de uso**: favs 2 ejecutar
 
 - **favs cargar ruta/archivo.txt**
-  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **cargar**, que dada una ruta y un archivo .txt, este guardará los datos almacenados en el .txt en la lista de favoritos actual de la shell.
+  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **cargar**, que dada una ruta y un archivo .txt, este guardará los datos almacenados en el .txt en la lista de favoritos actual de la shell y los mostrará en pantalla.
   - **Ejemplo de uso**: favs cargar /home/usuario/Documentos/prueba.txt
  
 - **favs guardar ruta/archivo.txt**
