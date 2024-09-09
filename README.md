@@ -28,7 +28,7 @@ En caso de error se entregará un mensaje que dice "Error en el comando ingresad
 **Ejemplo de errores:**
 - xd
 - |
-- ls| |wc
+- ls | | wc
 
 Luego, para terminar la shell se debe ejecutar el comando **exit**.
 
