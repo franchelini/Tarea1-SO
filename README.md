@@ -36,8 +36,9 @@ Luego, para terminar la shell se debe ejecutar el comando **exit**.
 Descripción y modo de uso de los nuevos comandos disponibles que podemos utilizar:
 
 - **favs crear ruta/archivo.txt**
-  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando crear, que creará un archivo .txt en la dirección de la ruta especificada.
+  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **crear**, que creará un archivo .txt en la dirección de la ruta especificada.
   
   - **Ejemplo de uso**: favs crear /home/usuario/Documentos/prueba.txt
-- **favs crear ruta/archivo.txt**
-  - **Modo de uso**: 
+    
+- **favs mostrar**
+  - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **mostrar**, este escribirá en pantalla los comandos que se hayan ejecutado anteriormente y se encuentren almacenados en la memoria. 
