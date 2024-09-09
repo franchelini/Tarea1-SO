@@ -67,3 +67,8 @@ Descripción y modo de uso de los nuevos comandos disponibles que podemos utiliz
 - **favs guardar ruta/archivo.txt**
   - **Modo de uso**: Al estar dentro de la shell podemos ejecutar el comando **guardar**, este guardará dentro de un archivo .txt los comandos almacenados en la lista de favoritos actual.
   - **Ejemplo de uso**: favs guardar /home/usuario/Documentos/prueba.txt
+
+- **reminder num Mensaje**
+  - **Modo de uso**: Al estar dentro de la shell podemos establecer un recordatorio que aparecerá en pantalla luego de los que el usuario establezca. 
+  - **Ejemplo de uso**: reminder 10 Recordatorio para ir a comprar manzanas.
+
