@@ -61,6 +61,13 @@ string getCurrentDir()
 
 int parser(const string &comando, long long &maxim, vector<vector<string>> &comandos)
 {
+    string c_sin_espacios;
+    for (char c : comando) {
+        if (c != ' ') {
+            c_sin_espacios += c;
+        }
+    }
+
     if (comando == "exit")
     {
         exit(0);
@@ -68,6 +75,11 @@ int parser(const string &comando, long long &maxim, vector<vector<string>> &coma
     else if (comando.empty())
     { // Si el comando esta vacio, limpiar y mostrar prompt
         comandos.clear();
+        cout << GRN "MyShell " << getCurrentDir() << " # " << NC;
+        return 1;
+    } else if(c_sin_espacios == "|" || c_sin_espacios.find("||")!=string::npos){
+        comandos.clear();
+        cout << "Error en el comando ingresado." << endl;
         cout << GRN "MyShell " << getCurrentDir() << " # " << NC;
         return 1;
     }
@@ -330,14 +342,6 @@ void comando_sin_pipe(const vector<vector<string>> &comandos)
                     "argumento."
                  << endl;
         }
-        /*else{
-            stringstream ss;
-            for (size_t i = 1; i < comandos[0].size(); ++i) {
-                ss << comandos[0][i] << " ";
-            }
-            favs(ss.str());
-        }
-        */
         if (comandos[0][1] == "mostrar")
         {
             favs_mostrar();
