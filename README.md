@@ -6,7 +6,7 @@ a las disponibles actualmente en Linux.
 
 ## Requisitos:
 - `Requisito 1`: Sistema operativo Linux
-- `Requisito 2`: Compilador de C++
+- `Requisito 2`: Compilador de C++ 11 o posterior
 
 ## Uso de la shell:
 - `Paso 1`: Abrir la terminal de Linux (Ctrl+Alt+t)
